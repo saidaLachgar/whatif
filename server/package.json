@@ -1,12 +1,14 @@
 {
-  "name": "server",
+  "name": "server-ts-node-express",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "dist/index.js",
   "author": "saida",
   "license": "MIT",
   "scripts": {
-    "build": "ts-node src/index.ts",
-    "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\""
+    "build": "npx tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "cors": "^2.8.5",

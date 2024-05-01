@@ -1,25 +1,42 @@
-import express from 'express'
-import cors from 'cors'
+import express, { Express, Request, Response } from "express";
+import cors from 'cors';
 import 'dotenv/config'
-import './db/conn'
-import { fetchPosts } from "./controllers/postsController"
+import './db/conn';
+import { fetchPosts } from './controllers/postsController';
 
-const PORT = process.env.PORT || 5050
-const app = express()
+
+/*
+ * Create an Express application and get the
+ * value of the PORT environment variable
+ * from the `process.env`
+ */
+
+const PORT = process.env.PORT || 5050;
+const app: Express = express();
 
 app.use(
   cors({
     origin: [process.env.CLIENT_URL || '*'],
-    // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
     methods: 'GET, PUT, POST',
     credentials: true
   }),
 )
 app.use(express.json())
 
+
+/* Define a route for the root path ("/")
+ using the HTTP GET method */
+// app.get("/", (req: Request, res: Response) => {
+//   res.send("Express + TypeScript Server");
+// });
+
+
+/* Define app routes */
 app.get('/posts', fetchPosts)
 
-// start the Express server
+
+/* Start the Express app and listen
+ for incoming requests on the specified port */
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`)
 })
