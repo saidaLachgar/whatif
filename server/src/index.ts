@@ -26,9 +26,9 @@ app.use(express.json())
 
 /* Define a route for the root path ("/")
  using the HTTP GET method */
-// app.get("/", (req: Request, res: Response) => {
-//   res.send("Express + TypeScript Server");
-// });
+app.get("/", (req: Request, res: Response) => {
+  res.send("Express + TypeScript Server");
+});
 
 
 /* Define app routes */
