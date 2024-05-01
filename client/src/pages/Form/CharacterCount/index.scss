@@ -1,0 +1,32 @@
+@import 'src/sass/utils/variables';
+.CharacterCount {
+  width: 29px;
+  height: 29px;
+  margin-right: 10px;
+  transition: opacity 0.3s ease;
+
+  &__Bg {
+    fill: none;
+    stroke: rgba($color-blue, 0.1);
+    stroke-width: 3;
+  }
+  &__Stroke {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke: var(--color);
+    animation: progress 1s ease-out forwards;
+  }
+  &__Value {
+    fill: var(--color);
+    font-size: 10px;
+    text-anchor: middle;
+    font-weight: 600;
+  }
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}

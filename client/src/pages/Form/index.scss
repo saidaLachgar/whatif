@@ -1,0 +1,192 @@
+@import 'src/sass/utils/variables';
+
+.Form {
+  position: relative;
+  width: 566px;
+  max-width: 100%;
+  height: 150px;
+  margin-top: 15px;
+  fieldset {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  &__Input {
+    border: 2px solid rgba($color-blue, 0.2);
+    background-color: var(--color-black);
+    transition: all 0.2s ease;
+    border-radius: 50px;
+    &:hover {
+      border-color: rgba($color-blue, 0.4);
+    }
+    &__input {
+      font-size: 17px !important;
+      font-family: var(--font-inter) !important;
+      position: relative !important;
+      font-weight: 500;
+      color: #fff;
+      padding: 22px 32px;
+      line-height: 1.5;
+      transition: all 0.4s ease;
+      min-height: 72px;
+
+      &::placeholder {
+        text-transform: uppercase;
+        color: #fff;
+        opacity: 1;
+      }
+    }
+
+    &__suggestions {
+      z-index: 5 !important;
+      animation: fadeIn 0.25s forwards;
+      &__list {
+        background-color: #1b1b1b;
+        z-index: 10;
+        border-radius: 10px;
+        position: absolute;
+        min-width: 120px;
+        overflow: hidden;
+
+        li {
+          width: 100%;
+          cursor: pointer;
+          padding: 15px;
+
+          &:hover {
+            background-color: rgba(#fff, 0.05);
+          }
+        }
+      }
+    }
+
+    &__highlighter {
+      position: absolute !important;
+      height: 100%;
+      padding-top: 28px;
+      padding-left: 35px;
+
+      // strong {
+      //   border-radius: 2px;
+      //   background-color: #4ca4ff40;
+      // }
+    }
+  }
+
+  &:not(.Form--active) textarea {
+    height: 72px !important;
+  }
+
+  &--active {
+    .Form__Input {
+      border-color: rgba($color-blue, 0.4);
+      border-radius: 22px;
+      textarea {
+        min-height: 133px;
+        box-shadow: none;
+        padding-bottom: 60px;
+      }
+    }
+
+    .Form__Actions {
+      &--right {
+        bottom: 2px;
+        padding-bottom: 20px;
+        width: calc(50% - 32px);
+        padding-top: 3px;
+        justify-content: flex-end;
+      }
+
+      &--left {
+        opacity: 1;
+        pointer-events: all;
+      }
+    }
+  }
+
+  &__Actions {
+    transition: all 0.3s ease;
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    background-color: var(--color-black);
+
+    &--left {
+      left: 32px;
+      bottom: 2px;
+      padding-bottom: 20px;
+      width: calc(50% - 32px);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    &--right {
+      bottom: 26px;
+      right: 32px;
+    }
+  }
+
+  &__ActionsItem {
+    button {
+      background-color: transparent;
+      padding: 7px;
+      margin-right: 3px;
+      border-radius: 20px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: rgba(#fff, 0.05);
+      }
+    }
+
+    .EmojiPickerReact {
+      position: absolute;
+    }
+  }
+
+  &__Button {
+    background-color: transparent;
+    font-size: 20px;
+    transition: opacity 0.3s ease;
+    color: var(--color-blue);
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  @media (max-width: 870px) {
+    &__Input__input {
+      min-height: 52px;
+      font-size: 14px !important;
+      padding: 15px 22px;
+    }
+
+    &:not(.Form--active) textarea {
+      height: 52px !important;
+    }
+
+    margin-top: 0px;
+    &__Button {
+      font-size: 14px;
+    }
+
+    &__Actions--right {
+      bottom: 20px;
+      right: 24px;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

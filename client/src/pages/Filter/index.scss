@@ -1,0 +1,49 @@
+@import 'src/sass/utils/variables';
+.Filter {
+  &__sort {
+    display: flex;
+    column-gap: 40px;
+    margin-bottom: 25px;
+    &__item {
+      opacity: 0.4;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+      padding-bottom: 9px;
+      cursor: pointer;
+      padding-right: 15px;
+      &:hover {
+        opacity: 0.9;
+      }
+      &--active {
+        opacity: 1;
+        border-color: #fff;
+      }
+      svg {
+        margin-right: 7px;
+      }
+    }
+  }
+  &__hashtags {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 8px;
+    row-gap: 12px;
+    margin-bottom: 30px;
+    &__item {
+      cursor: pointer;
+      padding: 11px 15px;
+      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      font-size: 14px;
+      min-width: 60px;
+      text-align: center;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.01);
+      }
+      &--active {
+        background-color: #fff !important;
+        color: #000;
+      }
+    }
+  }
+}
