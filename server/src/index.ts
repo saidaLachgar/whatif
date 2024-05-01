@@ -9,8 +9,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: '*',
-    // origin: ["https://deploy-mern-frontend.vercel.app"],
+    origin: [process.env.CLIENT_URL || '*'],
     // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
     methods: 'GET, PUT, POST',
     credentials: true

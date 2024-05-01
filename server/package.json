@@ -5,7 +5,7 @@
   "author": "saida",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "ts-node src/index.ts",
     "start": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\""
   },
   "dependencies": {
