@@ -29,7 +29,7 @@ app.use(express.json())
 /* Define a route for the root path ("/")
  using the HTTP GET method */
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("API - 👋🌎🌍🌏");
 });
 
 
@@ -40,5 +40,5 @@ app.get('/posts', fetchPosts)
 /* Start the Express app and listen
  for incoming requests on the specified port */
 app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT}`)
+  console.log(`Server is running on port: ${PORT} 🚀`)
 })
