@@ -14,9 +14,11 @@ import { fetchPosts } from './controllers/postsController';
 const PORT = process.env.PORT || 5050;
 const app: Express = express();
 
+console.log('ENVVVVVVVVVVVVVVVVVV', process.env.CLIENT_URL, process.env.ATLAS_URI);
+
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL || '*'],
+    origin: [process.env.CLIENT_URL],
     methods: 'GET, PUT, POST',
     credentials: true
   }),
