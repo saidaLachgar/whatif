@@ -2,6 +2,23 @@
   "version": 2,
   "buildCommand": "yarn build",
   "name": "nodejs-express",
-  "builds": [{ "src": "./dist/index.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "/dist/index.js" }]
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "dist/index.js"
+    }
+  ],
+  "builds": [
+    {
+      "src": "./dist/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/dist/index.js"
+    }
+  ]
 }
