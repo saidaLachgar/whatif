@@ -10,8 +10,10 @@ const app = express()
 app.use(
   cors({
     origin: '*',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+    // origin: ["https://deploy-mern-frontend.vercel.app"],
+    // allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
     methods: 'GET, PUT, POST',
+    credentials: true
   }),
 )
 app.use(express.json())

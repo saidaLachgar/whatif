@@ -1,11 +1,7 @@
 import Icon from 'src/components/Icon';
 import './index.scss';
 
-interface Props {
-  post: {},
-}
-
-const Post = ({ post }: Props): JSX.Element | null => {
+const Post = (): JSX.Element | null => {
   return (
     <div className="Post">
       <div className="Post__Header">

@@ -46,8 +46,8 @@ const Home = (): JSX.Element => {
         <h2 className="Listing__title">Discover</h2>
         <Filter />
         <div className="Listing__posts">
-          {[...Array(90)].map((post, index) => (
-            <Post post={post} key={index} />
+          {[...Array(90)].map((_post, index) => (
+            <Post key={index} />
           ))}
         </div>
       </section>

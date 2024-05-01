@@ -21,7 +21,8 @@
     "noFallthroughCasesInSwitch": true,
 
     /* custom config */
-    "types": ["vite-plugin-svgr/client "],
+    "noImplicitAny": false,
+    "types": ["vite-plugin-svgr/client"],
     "baseUrl": "./",
     "paths": {
       "src/*": [
