@@ -1,0 +1,44 @@
+@import 'src/sass/utils/variables';
+
+.Intro {
+  font-family: $font-ranade;
+
+  @media (max-width: 1355px) {
+    text-align: center;
+  }
+
+  &__Title {
+    font-size: 33px;
+    font-weight: 400;
+    margin-bottom: 15px;
+  }
+
+  &__Caption {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.5);
+
+    span {
+      cursor: pointer;
+      transition: color 0.1s ease;
+
+      &:hover {
+        color: var(--color-blue);
+      }
+    }
+  }
+
+  @media (max-width: 500px) {
+    &__Title {
+      font-size: 18px;
+    }
+
+    &__Caption {
+      font-size: 14px;
+
+      span {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+  }
+}

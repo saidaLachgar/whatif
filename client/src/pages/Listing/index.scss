@@ -1,0 +1,29 @@
+@import 'src/sass/utils/variables';
+
+.Listing {
+  &__title {
+    margin-bottom: 20px;
+    font-size: 40px;
+    font-weight: 500;
+    font-family: $font-ranade;
+
+    @media (max-width: 870px) {
+      font-size: 30px;
+    }
+  }
+
+  &__posts {
+    display: grid;
+    column-gap: 40px;
+    row-gap: 40px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    @media (max-width: 1400px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 870px) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+}

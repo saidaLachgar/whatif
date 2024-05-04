@@ -1,7 +1,7 @@
-import express, { Express, Request, Response } from "express";
 import cors from 'cors';
-import 'dotenv/config'
+import 'dotenv/config';
 import './db/conn';
+import express, { Express, Request, Response } from "express";
 import { fetchPosts } from './controllers/postsController';
 
 
@@ -11,32 +11,36 @@ import { fetchPosts } from './controllers/postsController';
  * from the `process.env`
  */
 
-const PORT = process.env.PORT || 5050;
-const app: Express = express();
+const PORT: string = process.env.PORT || '5050';
+const CORS: string = process.env.CLIENT_URL;
+const APP: Express = express();
 
-app.use(
+APP.use(
   cors({
-    origin: [process.env.CLIENT_URL],
+    origin: [CORS],
     methods: 'GET, PUT, POST',
     credentials: true
   }),
 )
-app.use(express.json())
+
+APP.use(express.json())
 
 
 /* Define a route for the root path ("/")
  using the HTTP GET method */
-app.get("/", (req: Request, res: Response) => {
+APP.get("/", (req: Request, res: Response) => {
   res.send("API - 👋🌎🌍🌏");
 });
 
 
 /* Define app routes */
-app.get('/posts', fetchPosts)
+// app.get('/test-posts', testPosts)
+APP.get('/posts', fetchPosts)
 
 
 /* Start the Express app and listen
  for incoming requests on the specified port */
-app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT} 🚀`)
+APP.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT} 🚀`);
+  console.log(`Allowed origines: ${CORS} 🤙🌎`);
 })

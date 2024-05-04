@@ -3,7 +3,7 @@
   &__sort {
     display: flex;
     column-gap: 40px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     &__item {
       opacity: 0.4;
       border-bottom: 2px solid transparent;
@@ -32,7 +32,7 @@
     &__item {
       cursor: pointer;
       padding: 11px 15px;
-      border: 0.5px solid rgba(255, 255, 255, 0.2);
+      border: 0.5px solid rgba(255, 255, 255, 0.1);
       border-radius: 30px;
       font-size: 14px;
       min-width: 60px;

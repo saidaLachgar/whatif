@@ -1,7 +1,12 @@
 import Icon from 'src/components/Icon';
 import './index.scss';
+import { TPost } from 'src/model/post';
 
-const Post = (): JSX.Element | null => {
+interface Props {
+  data: TPost,
+}
+
+const Post = ({ data }: Props): JSX.Element | null => {
   return (
     <div className="Post">
       <div className="Post__Header">
@@ -18,11 +23,11 @@ const Post = (): JSX.Element | null => {
         </div>
       </div>
       <div className="Post__Date">12 APRIL 2024</div>
-      <div className="Post__Content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique vitae soluta dolorum saepe, perferendis provident dolor voluptates aut numquam officiis accusamus eligendi obcaecati, #insta fuga atque earum eaque quibusdam quia</div>
+      <div className="Post__Content">{data.content}</div>
       <div className="Post__Rating">
         <p className="Post__Rating__Up">
           <Icon name="arrow" />
-          <span>Upvote . 119</span>
+          <span>Upvote . {(data.upvotes?.length || 0) - (data.downvotes?.length || 0)}</span>
         </p>
         <p className="Post__Rating__Down"><Icon name="arrow" /></p>
       </div>
