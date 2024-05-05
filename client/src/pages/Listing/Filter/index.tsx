@@ -1,9 +1,6 @@
 import './index.scss';
 
-interface Props {
-}
-
-const Filter = ({ }: Props): JSX.Element | null => {
+const Filter = (): JSX.Element | null => {
   return (
     <div className="Filter">
       {/* <ul className="Filter__sort">

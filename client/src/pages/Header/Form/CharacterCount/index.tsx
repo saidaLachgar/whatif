@@ -16,8 +16,7 @@ const CharacterCount = ({ count, limit }: Props): JSX.Element | null => {
       viewBox="0 0 36 36"
       className="CharacterCount"
       style={{
-        ['--color' as string]: `var(${count <= limit / 2 ? "--color-green" : (count <= limit ? "--color-orange" : "--color-red")
-          })`
+        ['--color' as string]: `var(${count <= limit / 2 ? "--color-green" : (count <= limit ? "--color-orange" : "--color-red")})`,
       }}
     >
       <path className="CharacterCount__Bg"

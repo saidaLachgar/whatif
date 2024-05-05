@@ -9,7 +9,9 @@ interface Props {
 }
 
 const Modal = ({ isOpen, onClose }: Props): JSX.Element | null => {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="Modal">

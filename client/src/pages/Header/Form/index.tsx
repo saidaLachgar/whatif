@@ -32,9 +32,9 @@ const Form = (): JSX.Element => {
   }, []);
 
   const defaultHashtags = useMemo(() => [
-    ...message.split(' ').filter(word => word.startsWith('#')),
-    ...["#insta", "#tech", "#love"]
-  ].map(word => ({ id: word, display: word })), []);;
+    ...message.split(' ').filter((word) => word.startsWith('#')),
+    ...["#insta", "#tech", "#love"],
+  ].map((word) => ({ id: word, display: word })), [message]);
 
   const handleChange = useCallback((event: { target: { value: string } }): OnChangeHandlerFunc => {
     const { value } = event.target;
@@ -84,7 +84,7 @@ const Form = (): JSX.Element => {
               autoFocusSearch={false}
               lazyLoadEmojis={true}
               emojiStyle={EmojiStyle.NATIVE}
-              onEmojiClick={value => handleInsert(value.emoji)}
+              onEmojiClick={(value) => handleInsert(value.emoji)}
               skinTonePickerLocation={SkinTonePickerLocation.PREVIEW} />
           </li>
           <li className="Form__ActionsItem">

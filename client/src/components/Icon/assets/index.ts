@@ -10,7 +10,6 @@ import Facebook from './facebook.svg?react'
 import Linkedin from './linkedin.svg?react'
 import Close from './close.svg?react'
 
-
 export default {
   'time': Time,
   'loading': Loading,

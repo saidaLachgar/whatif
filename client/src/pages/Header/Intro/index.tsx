@@ -2,7 +2,6 @@ import './index.scss';
 import Modal from './Modal';
 import { useState } from 'react';
 
-
 const Intro = (): JSX.Element | null => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 

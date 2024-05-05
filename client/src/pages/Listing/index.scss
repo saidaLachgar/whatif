@@ -1,6 +1,7 @@
 @import 'src/sass/utils/variables';
 
 .Listing {
+  margin-bottom: 100px;
   &__title {
     margin-bottom: 20px;
     font-size: 40px;
@@ -11,19 +12,24 @@
       font-size: 30px;
     }
   }
-
-  &__posts {
-    display: grid;
-    column-gap: 40px;
-    row-gap: 40px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-
-    @media (max-width: 1400px) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    @media (max-width: 870px) {
-      grid-template-columns: repeat(1, minmax(0, 1fr));
+  &__message {
+    text-align: center;
+  }
+  &__loadMore {
+    display: block;
+    margin: 70px auto;
+    width: max-content;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    min-width: 60px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.01);
     }
   }
 }

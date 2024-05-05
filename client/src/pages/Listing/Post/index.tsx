@@ -1,9 +1,9 @@
-import Icon from 'src/components/Icon';
 import './index.scss';
+import Icon from 'src/components/Icon';
 import { TPost } from 'src/model/post';
 
 interface Props {
-  data: TPost,
+  data: TPost;
 }
 
 const Post = ({ data }: Props): JSX.Element | null => {

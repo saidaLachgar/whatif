@@ -13,7 +13,6 @@ const Loading = (props: Props): JSX.Element => {
     hasNoText = false,
   } = props;
 
-
   const className = classnames('Loading', {
     'Loading--no-text': hasNoText,
   });

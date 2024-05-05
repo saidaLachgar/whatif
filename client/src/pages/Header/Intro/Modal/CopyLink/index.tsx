@@ -19,7 +19,7 @@ const CopyLink = (): JSX.Element | null => {
     // https://caniuse.com/?search=writeText
     if (support.navigatorClipboard) {
       try {
-        navigator.clipboard.writeText(textElementRef.current.value);
+        void navigator.clipboard.writeText(textElementRef.current.value);
         return setCopyStatus('Copied!');
       } catch (e) {
         setSupport({ ...support, navigatorClipboard: false });
@@ -39,7 +39,6 @@ const CopyLink = (): JSX.Element | null => {
       }
     }
   };
-
 
   return (
     <div className="Modal__links_item" onClick={copyToClipboard}>
