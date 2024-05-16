@@ -1,12 +1,27 @@
 import './index.scss';
-import Icon from 'src/components/Icon';
+import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { TPost } from 'src/model/post';
+import Icon from 'src/components/Icon';
 
 interface Props {
   data: TPost;
+  handleCancelPost(id?: string): void;
 }
 
-const Post = ({ data }: Props): JSX.Element | null => {
+const REGEX = /(#\w+)/g; // Regular expression to find hashtags
+const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
+
+  const content = useMemo(() => (
+    data.content?.split(REGEX).map((part, index) => {
+      if (part.startsWith('#')) {
+        const tag = part.substring(1);
+        return <Link to={`/${tag}`} key={index}>#{tag}</Link>;
+      }
+      return part;
+    })
+  ), [data.content]);
+
   return (
     <div className="Post">
       <div className="Post__Header">
@@ -17,13 +32,16 @@ const Post = ({ data }: Props): JSX.Element | null => {
             <b>Thanks for sharing your idea!</b>
             <p>
               we're reviewing it to ensure it meets our guidelines. this typically takes a day.&nbsp;
-              <span className="Post__Cancel">cancel post</span>
+              <span
+                onClick={() => { handleCancelPost(data._id); }}
+                className="Post__Cancel"
+              >cancel post</span>
             </p>
           </div>
         </div>
       </div>
       <div className="Post__Date">12 APRIL 2024</div>
-      <div className="Post__Content">{data.content}</div>
+      <div className="Post__Content">{content}</div>
       <div className="Post__Rating">
         <p className="Post__Rating__Up">
           <Icon name="arrow" />

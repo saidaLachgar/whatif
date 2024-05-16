@@ -28,6 +28,14 @@
     margin-left: 8px;
     vertical-align: 3px;
   }
+
+  &__Content a {
+    color: $color-blue;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
   &__ReviewingInfo {
     position: absolute;
     opacity: 0;

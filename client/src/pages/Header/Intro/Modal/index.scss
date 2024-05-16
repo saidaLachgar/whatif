@@ -11,6 +11,7 @@
   margin-top: -20px;
   animation: moveUp 0.3s ease forwards;
   width: max-content;
+  z-index: 10;
   &__close {
     position: absolute;
     top: 50px;

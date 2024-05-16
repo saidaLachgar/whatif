@@ -11,6 +11,9 @@ import Icon from "src/components/Icon";
 import CharacterCount from './CharacterCount';
 import classnames from 'classnames';
 import useOutside from "src/utils/useOutside";
+import { useMutation, useQueryClient } from "react-query";
+import api from 'src/api/posts';
+import toast from "react-hot-toast";
 
 const LIMIT = 400;
 
@@ -19,8 +22,33 @@ const Form = (): JSX.Element => {
   const emojiRef = useRef(null);
   const [count, setCount] = useState(0);
   const [isOpen, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
+  const [content, setContent] = useState("");
   useOutside(emojiRef, () => setOpen(false));
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(api.addPost, {
+    onMutate: () => {
+      toast.loading('Submitting post...');
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      toast.success('Post submitted successfully', { icon: '🔥' });
+      queryClient.invalidateQueries('posts');
+      setContent('');
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(`Error submitting post: ${error.message}`);
+    },
+  });
+
+  const handleSubmit = useCallback(() => {
+    if (!content || count > LIMIT) {
+      return;
+    }
+
+    mutation.mutate(content);
+  }, [content, mutation, count]);
 
   useEffect(() => {
     const textarea = inputRef.current;
@@ -32,13 +60,13 @@ const Form = (): JSX.Element => {
   }, []);
 
   const defaultHashtags = useMemo(() => [
-    ...message.split(' ').filter((word) => word.startsWith('#')),
+    ...content.split(' ').filter((word) => word.startsWith('#')),
     ...["#insta", "#tech", "#love"],
-  ].map((word) => ({ id: word, display: word })), [message]);
+  ].map((word) => ({ id: word, display: word })), [content]);
 
   const handleChange = useCallback((event: { target: { value: string } }): OnChangeHandlerFunc => {
     const { value } = event.target;
-    setMessage(value);
+    setContent(value);
     setCount(value.length);
   }, []);
 
@@ -47,11 +75,12 @@ const Form = (): JSX.Element => {
   });
 
   const handleInsert = useCallback((text: string) => {
-    setMessage(`${message} ${text}`);
+    setContent(`${content} ${text}`);
     if (inputRef?.current) {
       inputRef.current.focus();
     }
-  }, [message]);
+  }, [content
+  ]);
 
   return (
     <div className={classNames}>
@@ -60,7 +89,7 @@ const Form = (): JSX.Element => {
         <MentionsInput
           className="Form__Input"
           inputRef={inputRef}
-          value={message}
+          value={content}
           required
           // maxLength={LIMIT}
           placeholder="I Wish There Was An App For ..."
@@ -98,7 +127,11 @@ const Form = (): JSX.Element => {
         </ul>
         <div className="Form__Actions Form__Actions--right">
           <CharacterCount limit={LIMIT} count={count} />
-          <button className="Form__Button">PUBLISH</button>
+          <button
+            disabled={count > LIMIT}
+            onClick={handleSubmit}
+            className="Form__Button"
+          >PUBLISH</button>
         </div>
       </fieldset>
     </div>

@@ -2,7 +2,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import './db/conn';
 import express, { Express, Request, Response } from "express";
-import { fetchPosts } from './controllers/postsController';
+import { fetchPosts, cancelPost, createPost } from './controllers/postsController';
 
 
 /*
@@ -15,15 +15,17 @@ const PORT: string = process.env.PORT || '5050';
 const CORS: string = process.env.CLIENT_URL;
 const APP: Express = express();
 
+APP.set('trust proxy', true)
+
 APP.use(
   cors({
     origin: [CORS],
-    methods: 'GET, PUT, POST',
+    methods: 'GET, PUT, POST, PATCH',
     credentials: true
   }),
-)
+);
 
-APP.use(express.json())
+APP.use(express.json());
 
 
 /* Define a route for the root path ("/")
@@ -35,7 +37,13 @@ APP.get("/", (req: Request, res: Response) => {
 
 /* Define app routes */
 // app.get('/test-posts', testPosts)
-APP.get('/posts', fetchPosts)
+// Route to get paginated posts with filter
+APP.get('/posts', fetchPosts);
+// Route to cancel a post by ID
+APP.patch('/posts/:id/cancel', cancelPost);
+// Route to create new post
+APP.post('/posts', createPost);
+
 
 
 /* Start the Express app and listen
