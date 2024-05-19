@@ -12,6 +12,7 @@ function Listing() {
   const { hashtag } = useParams();
   const listRef = useRef<HTMLElement>(null);
   const queryClient = useQueryClient();
+  const ipAddress: string | null = window.localStorage.getItem('ipAddress');
 
   /**
    * get posts list using infinite query
@@ -24,7 +25,7 @@ function Listing() {
     isLoading,
     error,
   } = useInfiniteQuery<APIResult, Error>({
-    queryKey: ["posts", { hashtag }],
+    queryKey: ["posts", { hashtag, ipAddress }],
     queryFn: api.fetchPaginatedPosts,
     getNextPageParam: (lastPage, _) => lastPage.nextPage,
     refetchOnWindowFocus: false,

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { QueryFunction, QueryKey } from 'react-query';
-import { TPost } from 'src/model/post';
+import { TPost, TPostSubmit } from 'src/model/post';
 
 export interface APIResult {
   docs: TPost[];
@@ -13,6 +13,7 @@ export interface APIResult {
   hasNextPage: boolean;
   prevPage: number;
   nextPage: number;
+  ipAddress: string;
 }
 interface QueryFunction {
   pageParam: number, queryKey: QueryKey
@@ -29,6 +30,7 @@ const fetchPaginatedPosts: QueryFunction<APIResult, 'posts'> = async ({ pagePara
         page: pageParam,
         limit: 100,
         q: (queryKey[1])?.hashtag ?? null,
+        ip: (queryKey[1])?.ipAddress ?? null,
       },
     });
     return data;
@@ -46,9 +48,9 @@ const cancelPost = async (postId: string): Promise<AxiosResponse<TPost>> => {
   }
 };
 
-const addPost = async (content: TPost['content']) => {
+const addPost = async (payload: TPostSubmit) => {
   try {
-    const response = await client.post('/posts', { content });
+    const response = await client.post('/posts', payload);
     return response.data;
   } catch (error) {
     throw new Error('Error submitting new post');

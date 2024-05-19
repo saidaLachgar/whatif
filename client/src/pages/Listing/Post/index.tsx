@@ -11,6 +11,16 @@ interface Props {
 
 const REGEX = /(#\w+)/g; // Regular expression to find hashtags
 const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
+  const isAuthor = useMemo(() => (
+    window.localStorage.getItem('ipAddress') === data.ipAddress
+  ), [data.ipAddress]);
+
+  const date = useMemo(() => (
+    data.date ? new Date(data.date).toLocaleDateString(
+      'en-GB',
+      { day: '2-digit', month: 'long', year: 'numeric' }
+    ).toUpperCase() : null
+  ), [data.date]);
 
   const content = useMemo(() => (
     data.content?.split(REGEX).map((part, index) => {
@@ -24,23 +34,27 @@ const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
 
   return (
     <div className="Post">
-      <div className="Post__Header">
-        <span className="Post__Author">POSTED BY YOU</span>
-        <div className="Post__Reviewing">
-          <Icon name="time" className="Post__ReviewingIcon" />
-          <div className="Post__ReviewingInfo">
-            <b>Thanks for sharing your idea!</b>
-            <p>
-              we're reviewing it to ensure it meets our guidelines. this typically takes a day.&nbsp;
-              <span
-                onClick={() => { handleCancelPost(data._id); }}
-                className="Post__Cancel"
-              >cancel post</span>
-            </p>
-          </div>
+      {isAuthor &&
+        <div className="Post__Header">
+          <span className="Post__Author">POSTED BY YOU</span>
+          {!data.reviewed &&
+            <div className="Post__Reviewing">
+              <Icon name="time" className="Post__ReviewingIcon" />
+              <div className="Post__ReviewingInfo">
+                <b>Thanks for sharing your idea!</b>
+                <p>
+                  we're reviewing it to ensure it meets our guidelines. this typically takes a day.&nbsp;
+                  <span
+                    onClick={() => { handleCancelPost(data._id); }}
+                    className="Post__Cancel"
+                  >cancel post</span>
+                </p>
+              </div>
+            </div>
+          }
         </div>
-      </div>
-      <div className="Post__Date">12 APRIL 2024</div>
+      }
+      <div className="Post__Date">{date}</div>
       <div className="Post__Content">{content}</div>
       <div className="Post__Rating">
         <p className="Post__Rating__Up">

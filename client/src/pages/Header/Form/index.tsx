@@ -35,6 +35,7 @@ const Form = (): JSX.Element => {
       toast.success('Post submitted successfully', { icon: '🔥' });
       queryClient.invalidateQueries('posts');
       setContent('');
+      setCount(0);
     },
     onError: (error) => {
       toast.dismiss();
@@ -47,7 +48,9 @@ const Form = (): JSX.Element => {
       return;
     }
 
-    mutation.mutate(content);
+    const ipAddress = window.localStorage.getItem('ipAddress');
+    const transformMarkup = content.replace(/@\[(#[^\]]+)\]\([^)]+\)/g, '$1');
+    mutation.mutate({ content: transformMarkup, ipAddress });
   }, [content, mutation, count]);
 
   useEffect(() => {
@@ -79,8 +82,7 @@ const Form = (): JSX.Element => {
     if (inputRef?.current) {
       inputRef.current.focus();
     }
-  }, [content
-  ]);
+  }, [content]);
 
   return (
     <div className={classNames}>
@@ -91,7 +93,6 @@ const Form = (): JSX.Element => {
           inputRef={inputRef}
           value={content}
           required
-          // maxLength={LIMIT}
           placeholder="I Wish There Was An App For ..."
           onChange={handleChange}>
           <Mention

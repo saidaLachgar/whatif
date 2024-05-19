@@ -7,17 +7,17 @@ export const fetchPosts = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const hashtag = req.query.q as string;
-  const userIpAddress = req.ip.split(`:`).pop();
+  const userIpAddress = req.query.ip as string;
 
   let query: any = {
     /* This query object ensures that only posts 
       that are either reviewed or belong to the current 
       user's IP address are included. */
     canceled: false,
-    $or: [
-      { reviewed: true },
-      { ipAddress: userIpAddress }
-    ]
+    // $or: [
+    //   { reviewed: true },
+    //   { ipAddress: userIpAddress }
+    // ]
   };
   if (hashtag) {
     query.hashtags = { $in: [hashtag] };
@@ -56,7 +56,7 @@ export const cancelPost = async (req: Request, res: Response) => {
 };
 
 export const createPost = async (req: Request, res: Response) => {
-  const { content } = req.body;
+  const { content, ipAddress } = req.body;
   if (!content) {
     return;
   }
@@ -66,7 +66,7 @@ export const createPost = async (req: Request, res: Response) => {
     _id: new mongoose.Types.ObjectId(),
     date: new Date().toLocaleDateString("en-US"),
     hashtags: content.match(/#\w+/g) || [],
-    ipAddress: req.ip.split(`:`).pop(),
+    ipAddress: ipAddress,
     content,
     upvotes: [],
     downvotes: [],

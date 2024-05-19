@@ -4,7 +4,7 @@
 [x] delete (cancel)
 [x] submit
 [x] ip address
-[] POSTED BY YOU
+[x] POSTED BY YOU
 [] vot up / down
 [] scroll to new added posts
 [] bug i have to click twice in order that emoji picker show
