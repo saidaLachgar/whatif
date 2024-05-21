@@ -14,13 +14,13 @@ export const fetchPosts = async (req: Request, res: Response) => {
       that are either reviewed or belong to the current 
       user's IP address are included. */
     canceled: false,
-    // $or: [
-    //   { reviewed: true },
-    //   { ipAddress: userIpAddress }
-    // ]
+    $or: [
+      { reviewed: true },
+      { ipAddress: userIpAddress }
+    ]
   };
   if (hashtag) {
-    query.hashtags = { $in: [hashtag] };
+    query.hashtags = { $in: [`#${hashtag}`] };
   }
 
   try {
@@ -80,5 +80,93 @@ export const createPost = async (req: Request, res: Response) => {
     res.status(201).json(savedPost);
   } catch (error) {
     res.status(500).json({ message: 'Error creating post', error });
+  }
+};
+
+export const topHashtags = async (req: Request, res: Response) => {
+  const userIpAddress = req.query.ip as string;
+  try {
+    const topHashtags = await PostModel.aggregate([
+      {
+        $match: {
+          canceled: false,
+          $or: [
+            { reviewed: true },
+            { ipAddress: userIpAddress }
+          ]
+        }
+      }, // Filter only reviewed posts
+      /* $unwind: Deconstructs the hashtags array field from the input 
+        documents to output a document for each element. 
+        */
+      { $unwind: "$hashtags" },
+      /* $group: Groups the documents by hashtag. In the grouping stage, we:
+        Use $sum to count the occurrences of each hashtag.
+        Use $addToSet to collect unique post IDs associated with each hashtag.
+        */
+      {
+        $group: {
+          _id: "$hashtags",
+          count: { $sum: 1 },
+          postIds: { $addToSet: "$_id" }
+        }
+      },
+      /* $project: Creates a new field postCount which uses $size to count 
+        the number of unique post IDs for each hashtag.*/
+
+      {
+        $project: {
+          _id: 1,
+          count: 1,
+          // postCount: { $size: "$postIds" }
+        }
+      },
+      // $sort: Sorts the documents by the count in descending order.
+      { $sort: { count: -1, _id: 1 } },
+      // $limit: Limits the results to the top 10 hashtags.
+      { $limit: 13 },
+    ]);
+
+    res.json(topHashtags);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching top hashtags.' });
+  }
+};
+
+export const searchHashtags = async (req: Request, res: Response) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: 'Query parameter is required.' });
+  }
+
+  try {
+    const suggestions = await PostModel.aggregate([
+      { $unwind: "$hashtags" },
+      {
+        $match: {
+          hashtags: { $regex: `^#${query}`, $options: 'i' }
+        }
+      },
+      {
+        $group: {
+          _id: "$hashtags",
+          count: { $sum: 1 },
+          postIds: { $addToSet: "$_id" }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          count: 1,
+          postCount: { $size: "$postIds" }
+        }
+      },
+      { $limit: 10 }
+    ]);
+
+    res.json(suggestions);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching hashtag suggestions.' });
   }
 };

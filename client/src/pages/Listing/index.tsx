@@ -26,7 +26,7 @@ function Listing() {
     error,
   } = useInfiniteQuery<APIResult, Error>({
     queryKey: ["posts", { hashtag, ipAddress }],
-    queryFn: api.fetchPaginatedPosts,
+    queryFn: api.fetchPosts,
     getNextPageParam: (lastPage, _) => lastPage.nextPage,
     refetchOnWindowFocus: false,
   })
@@ -56,7 +56,7 @@ function Listing() {
    * we can flatten the data into a single array.
    */
   const flattenedData = useMemo(
-    () => (data ? data?.pages.flatMap((item) => item.docs) : []),
+    () => (data?.pages?.length ? data.pages.flatMap((item) => item.docs) : []),
     [data]
   );
 
@@ -103,17 +103,19 @@ function Listing() {
       <h2 className="Listing__title">DISCOVER</h2>
       <Filter />
       <div className="Listing__posts">
-        <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
-          <Masonry gutter="40px">
-            {flattenedData.map((item, index) => (
-              <Post
-                key={`post-${index}`}
-                data={item}
-                handleCancelPost={handleCancelPost}
-              />
-            ))}
-          </Masonry>
-        </ResponsiveMasonry>
+        {!isFetching && !isLoading && !!flattenedData?.length &&
+          <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
+            <Masonry gutter="40px">
+              {flattenedData.map((item, index) => (
+                <Post
+                  key={`post-${index}`}
+                  data={item}
+                  handleCancelPost={handleCancelPost}
+                />
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+        }
         {!isFetching && hasNextPage &&
           <div
             className="Listing__loadMore"

@@ -2,7 +2,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import './db/conn';
 import express, { Express, Request, Response } from "express";
-import { fetchPosts, cancelPost, createPost } from './controllers/postsController';
+import { fetchPosts, cancelPost, createPost, searchHashtags, topHashtags } from './controllers/postsController';
 
 
 /*
@@ -43,6 +43,10 @@ APP.get('/posts', fetchPosts);
 APP.patch('/posts/:id/cancel', cancelPost);
 // Route to create new post
 APP.post('/posts', createPost);
+// Route to autocomplete hashtags
+APP.get('/search-hashtags', searchHashtags);
+// Route to get top hashtags
+APP.get('/top-hashtags', topHashtags);
 
 
 

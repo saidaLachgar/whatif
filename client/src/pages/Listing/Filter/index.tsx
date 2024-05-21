@@ -1,6 +1,31 @@
 import './index.scss';
+import { useQuery } from 'react-query';
+import classnames from 'classnames';
+import { TPostHashtags } from 'src/model/post';
+import api from 'src/api/posts';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback } from 'react';
 
 const Filter = (): JSX.Element | null => {
+  const ipAddress: string | null = window.localStorage.getItem('ipAddress');
+  const { hashtag } = useParams();
+  const navigate = useNavigate();
+
+  const handleFilter = useCallback((id: string) => {
+    const newHashtag = id.substring(1); // Remove the '#' from the _id
+    navigate(`/${newHashtag}`);
+  }, [navigate]);
+
+  /**
+   * get top hashtags
+   */
+  const {
+    data,
+  } = useQuery<TPostHashtags[], Error>({
+    queryKey: ["topHashtags", { ipAddress }],
+    queryFn: api.topHashtags,
+  })
+
   return (
     <div className="Filter">
       {/* <ul className="Filter__sort">
@@ -17,17 +42,25 @@ const Filter = (): JSX.Element | null => {
           Top
         </li>
       </ul> */}
-      <ul className="Filter__hashtags">
-        <li className='Filter__hashtags__item Filter__hashtags__item--active'>All</li>
-        <li className='Filter__hashtags__item'>#insta</li>
-        <li className='Filter__hashtags__item'>#invoice</li>
-        <li className='Filter__hashtags__item'>#tool</li>
-        <li className='Filter__hashtags__item'>#lawyer</li>
-        <li className='Filter__hashtags__item'>#student</li>
-        <li className='Filter__hashtags__item'>#agile</li>
-        <li className='Filter__hashtags__item'>#movies</li>
-        <li className='Filter__hashtags__item'>#movies</li>
-      </ul>
+      {data?.length &&
+        <ul className="Filter__hashtags">
+          <li
+            onClick={() => navigate("/")}
+            className={classnames('Filter__hashtags__item', {
+              'Filter__hashtags__item--active': !hashtag,
+            })}
+          >All</li>
+          {data.map(({ _id, count }, index) => (
+            <li
+              key={`hashtags-${index}`}
+              onClick={() => handleFilter(_id)}
+              className={classnames('Filter__hashtags__item', {
+                'Filter__hashtags__item--active': hashtag === _id.substring(1),
+              })}
+            >{_id}{count ? ` (${count})` : ''}</li>
+          ))}
+        </ul>
+      }
     </div>
   );
 };

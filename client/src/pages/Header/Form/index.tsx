@@ -6,7 +6,7 @@ import {
   OnChangeHandlerFunc,
 } from "react-mentions";
 import EmojiPicker, { EmojiStyle, SkinTonePickerLocation, Theme } from 'emoji-picker-react';
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Icon from "src/components/Icon";
 import CharacterCount from './CharacterCount';
 import classnames from 'classnames';
@@ -14,6 +14,7 @@ import useOutside from "src/utils/useOutside";
 import { useMutation, useQueryClient } from "react-query";
 import api from 'src/api/posts';
 import toast from "react-hot-toast";
+import { TPostHashtags } from "src/model/post";
 
 const LIMIT = 400;
 
@@ -48,8 +49,8 @@ const Form = (): JSX.Element => {
       return;
     }
 
-    const ipAddress = window.localStorage.getItem('ipAddress');
-    const transformMarkup = content.replace(/@\[(#[^\]]+)\]\([^)]+\)/g, '$1');
+    const ipAddress = window.localStorage.getItem('ipAddress')!;
+    const transformMarkup = content.match(/#\[([^#\]]+)\]/)?.[1] || '';
     mutation.mutate({ content: transformMarkup, ipAddress });
   }, [content, mutation, count]);
 
@@ -62,10 +63,26 @@ const Form = (): JSX.Element => {
     };
   }, []);
 
-  const defaultHashtags = useMemo(() => [
-    ...content.split(' ').filter((word) => word.startsWith('#')),
-    ...["#insta", "#tech", "#love"],
-  ].map((word) => ({ id: word, display: word })), [content]);
+  const hashtagsSuggestions = async (query: string, callback) => {
+    if (!query) {
+      callback([]);
+      return;
+    }
+
+    try {
+      const response: TPostHashtags[] = await api.fetchHashtags(query);
+
+      const suggestions = response.map((hashtag) => ({
+        id: hashtag._id,
+        display: `${hashtag._id} (${hashtag.count} posts)`,
+      }));
+      callback(suggestions);
+
+    } catch (error) {
+      console.error('Error fetching hashtag suggestions:', error);
+    }
+
+  };
 
   const handleChange = useCallback((event: { target: { value: string } }): OnChangeHandlerFunc => {
     const { value } = event.target;
@@ -98,7 +115,9 @@ const Form = (): JSX.Element => {
           <Mention
             trigger="#"
             appendSpaceOnAdd
-            data={defaultHashtags}
+            displayTransform={(id: string) => id}
+            markup="#[__id__]"
+            data={hashtagsSuggestions}
           />
         </MentionsInput>
 

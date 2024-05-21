@@ -9,3 +9,10 @@ export type TPost = {
     reviewed?: boolean,
     canceled?: boolean,
 };
+export type TPostSubmit = {
+    ipAddress?: string,
+    content?: string,
+};
+export type TPostHashtags = {
+    _id: string, count: number
+};
