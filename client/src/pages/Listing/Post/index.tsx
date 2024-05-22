@@ -1,4 +1,5 @@
 import './index.scss';
+import classnames from 'classnames';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { TPost } from 'src/model/post';
@@ -7,13 +8,14 @@ import Icon from 'src/components/Icon';
 interface Props {
   data: TPost;
   handleCancelPost(id?: string): void;
+  handleVotePost(id: string, up: boolean): void;
 }
 
 const REGEX = /(#\w+)/g; // Regular expression to find hashtags
-const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
-  const isAuthor = useMemo(() => (
-    window.localStorage.getItem('ipAddress') === data.ipAddress
-  ), [data.ipAddress]);
+const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | null => {
+  const ipAddress = useMemo(() => (
+    window.localStorage.getItem('ipAddress')
+  ), []);
 
   const date = useMemo(() => (
     data.date ? new Date(data.date).toLocaleDateString(
@@ -34,7 +36,7 @@ const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
 
   return (
     <div className="Post">
-      {isAuthor &&
+      {ipAddress === data.ipAddress &&
         <div className="Post__Header">
           <span className="Post__Author">POSTED BY YOU</span>
           {!data.reviewed &&
@@ -57,11 +59,22 @@ const Post = ({ data, handleCancelPost }: Props): JSX.Element | null => {
       <div className="Post__Date">{date}</div>
       <div className="Post__Content">{content}</div>
       <div className="Post__Rating">
-        <p className="Post__Rating__Up">
+        <p
+          className={classnames('Post__Rating__Up', {
+            'Post__Rating__Up--active': data.upvotes?.includes(ipAddress),
+          })}
+          onClick={() => { handleVotePost(data._id!, true); }}
+        >
           <Icon name="arrow" />
           <span>Upvote . {(data.upvotes?.length || 0) - (data.downvotes?.length || 0)}</span>
         </p>
-        <p className="Post__Rating__Down"><Icon name="arrow" /></p>
+        <p
+          className={classnames('Post__Rating__Down', {
+            'Post__Rating__Down--active': data.downvotes?.includes(ipAddress),
+          })}
+          onClick={() => { handleVotePost(data._id!, false); }}
+        ><Icon name="arrow" />
+        </p>
       </div>
     </div>
   );

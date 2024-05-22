@@ -13,6 +13,11 @@ export type TPostSubmit = {
     ipAddress?: string,
     content?: string,
 };
+export type TPostVote = {
+    ipAddress?: string,
+    postId: string,
+    up: boolean,
+};
 export type TPostHashtags = {
     _id: string, count: number
 };

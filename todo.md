@@ -7,14 +7,13 @@
 [x] POSTED BY YOU
 [x] top hashtags
 [x] hashtags suggestions
-[] vot up / down
-[] scroll to new added posts
+[x] vot up / down
+[] add sorting options (Most Popular, Newest).
 [] add data
 [] add suggestions
 [] captcha
 [] add footer
 created by an athunsim developer for fun
-[] add sorting options (Most Popular, Newest).
 
 https://x.com/ghoulbyday/status/1630064103107559424
 https://www.reddit.com/r/Android/comments/2r17n5/what_is_one_thing_you_say_i_wish_there_was_an_app/

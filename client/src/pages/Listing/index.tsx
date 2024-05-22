@@ -61,7 +61,7 @@ function Listing() {
   );
 
   // cancel post
-  const mutation = useMutation(api.cancelPost, {
+  const cancelMutation = useMutation(api.cancelPost, {
     onMutate: () => {
       toast.loading('Canceling post...');
     },
@@ -81,29 +81,42 @@ function Listing() {
     if (!postId) {
       return;
     }
-    mutation.mutate(postId);
-  }, [mutation]);
+    cancelMutation.mutate(postId);
+  }, [cancelMutation]);
 
-  /**
-   * Will be true only for the initial load
-   */
-  if (isLoading) {
-    return <div className="Listing__message">Loading Data...</div>;
-  }
+  // vote post
+  const voteMutation = useMutation(api.votePost, {
+    onMutate: () => {
+      toast.loading('Loading...');
+    },
+    onSuccess: () => {
+      toast.dismiss();
+      // Invalidate and refetch posts query after a post is canceled
+      queryClient.invalidateQueries('posts');
+      queryClient.invalidateQueries('topHashtags');
+    },
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(error.message);
+    },
+  });
 
-  /**
-   * Show error if the API fails
-   */
-  if (error) {
-    return <div className="Listing__message">Couldn't fetch data</div>;
-  }
+  const handleVotePost = useCallback((postId: string, up: boolean) => {
+    voteMutation.mutate({ postId, up, ipAddress });
+  }, [voteMutation, ipAddress]);
 
   return (
     <section className="Listing" ref={listRef}>
       <h2 className="Listing__title">DISCOVER</h2>
       <Filter />
+      {isLoading && (
+        <div className="Listing__message">Loading Data...</div>
+      )}
+      {error && (
+        <div className="Listing__message">Couldn't fetch data</div>
+      )}
       <div className="Listing__posts">
-        {!isFetching && !isLoading && !!flattenedData?.length &&
+        {!!flattenedData?.length &&
           <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3 }}>
             <Masonry gutter="40px">
               {flattenedData.map((item, index) => (
@@ -111,6 +124,7 @@ function Listing() {
                   key={`post-${index}`}
                   data={item}
                   handleCancelPost={handleCancelPost}
+                  handleVotePost={handleVotePost}
                 />
               ))}
             </Masonry>

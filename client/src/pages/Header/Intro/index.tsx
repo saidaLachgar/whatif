@@ -7,10 +7,12 @@ const Intro = (): JSX.Element | null => {
 
   return (
     <div className="Intro">
-      <h1 className="Intro__Title">What If There Is An App ?<br />From Imagination to Implementation</h1>
+      {/* <h1 className="Intro__Title">What If There Is An App ?<br />From Imagination to Implementation</h1> */}
+      <h1 className="Intro__Title">A Hub For Creative Minds<br />To Share And Discover Ideas</h1>
       <p className="Intro__Caption">
-        Sharing creative website and app ideas,{' '}
-        <span onClick={() => { setIsModalOpen(true) }}>learn more.</span>
+        Built for creators, and innovators.{' '}
+        {/* Sharing creative website and app ideas,{' '} */}
+        <span onClick={() => { setIsModalOpen(true) }}>Read more</span>
       </p>
       <Modal isOpen={isModalOpen} onClose={() => { setIsModalOpen(false) }} />
     </div>

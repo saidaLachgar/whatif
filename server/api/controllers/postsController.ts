@@ -55,6 +55,55 @@ export const cancelPost = async (req: Request, res: Response) => {
   }
 };
 
+export const votePost = async (req: Request, res: Response) => {
+  const { up, ipAddress } = req.body;
+  const { id } = req.params;
+
+  try {
+    const post = await PostModel.findById(id);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found.' });
+    }
+
+    const indexInUpvotes = post.upvotes.indexOf(ipAddress);
+    const indexInDownvotes = post.downvotes.indexOf(ipAddress);
+
+    if (up) {
+      // If user already upvoted, remove it
+      if (indexInUpvotes !== -1) {
+        post.upvotes.splice(indexInUpvotes, 1);
+      } else {
+        // If user downvoted, remove it from downvotes array
+        if (indexInDownvotes !== -1) {
+          post.downvotes.splice(indexInDownvotes, 1);
+        }
+        // Add user's IP to upvotes array
+        post.upvotes.push(ipAddress);
+      }
+    } else {
+      // If user already downvoted, remove it
+      if (indexInDownvotes !== -1) {
+        post.downvotes.splice(indexInDownvotes, 1);
+      } else {
+        // If user upvoted, remove it from upvotes array
+        if (indexInUpvotes !== -1) {
+          post.upvotes.splice(indexInUpvotes, 1);
+        }
+        // Add user's IP to downvotes array
+        post.downvotes.push(ipAddress);
+      }
+    }
+
+    // Save the updated post
+    const savedPost = await post.save();
+    res.status(201).json(savedPost);
+  } catch (error) {
+    console.error('Error while processing vote:', error);
+    res.status(500).json({ error: 'An error occurred while processing the vote.' });
+  }
+};
+
 export const createPost = async (req: Request, res: Response) => {
   const { content, ipAddress } = req.body;
   if (!content) {

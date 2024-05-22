@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosInstance } from 'axios';
 import { QueryFunction, QueryKey } from 'react-query';
-import { TPost, TPostHashtags, TPostSubmit } from 'src/model/post';
+import { TPost, TPostHashtags, TPostSubmit, TPostVote } from 'src/model/post';
 
 export interface APIResult {
   docs: TPost[];
@@ -39,12 +39,25 @@ const fetchPosts: QueryFunction<APIResult, 'posts'> = async ({ pageParam = 1, qu
   }
 };
 
-const cancelPost = async (postId: string): Promise<AxiosResponse<TPost>> => {
+const cancelPost = async (postId: string): Promise<TPost> => {
   try {
-    const { data } = await client.patch<TPost>(`/posts/${postId}/cancel`);
+    const { data } = await client.patch<AxiosResponse<TPost>>(`/posts/${postId}/cancel`);
     return data;
   } catch (error) {
     throw new Error('Error canceling the post');
+  }
+};
+
+const votePost = async (payload: TPostVote): Promise<TPost> => {
+  try {
+    const { postId, up, ipAddress } = payload;
+    const { data } = await client.patch<TPost>(
+      `/posts/${postId}/vote`,
+      { up, ipAddress }
+    );
+    return data;
+  } catch (error) {
+    throw new Error(error.response.data.error);
   }
 };
 
@@ -85,6 +98,7 @@ export default {
   fetchPosts,
   cancelPost,
   addPost,
+  votePost,
   topHashtags,
   fetchHashtags,
 };
