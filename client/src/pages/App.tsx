@@ -5,7 +5,7 @@ import Header from "./Header";
 import Listing from "./Listing";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +20,7 @@ const Home = (): JSX.Element => {
 
     const fetchIpAddress = async () => {
       try {
-        const response = await axios.get<AxiosResponse<{ ip: string }>>('https://api.ipify.org?format=json');
+        const response = await axios.get<{ ip: string }>('https://api.ipify.org?format=json');
         localStorage.setItem('ipAddress', response.data.ip);
       } catch (e) {
         throw new Error('Error fetching the IP address');

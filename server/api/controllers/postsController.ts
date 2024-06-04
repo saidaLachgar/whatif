@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 export const fetchPosts = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
+  const sortBy = req.query.sort as string;
   const hashtag = req.query.q as string;
   const userIpAddress = req.query.ip as string;
 
@@ -19,12 +20,27 @@ export const fetchPosts = async (req: Request, res: Response) => {
       { ipAddress: userIpAddress }
     ]
   };
+
   if (hashtag) {
     query.hashtags = { $in: [`#${hashtag}`] };
   }
 
+  let sort = {};
+  switch (sortBy) {
+    case 'new':
+      sort = { date: -1 };
+      break;
+    case 'top':
+      sort = { upvotes: -1 };
+      break;
+    case 'hot':
+      sort = { score: -1 };
+    default:
+      sort = {};
+  }
+
   try {
-    const paginatedResult = await PostModel.paginate(query, { page, limit });
+    const paginatedResult = await PostModel.paginate(query, { page, limit, sort });
 
     // Return the paginated result
     res.json(paginatedResult);
@@ -128,6 +144,7 @@ export const createPost = async (req: Request, res: Response) => {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: 'Error creating post', error });
   }
 };
@@ -217,5 +234,44 @@ export const searchHashtags = async (req: Request, res: Response) => {
     res.json(suggestions);
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching hashtag suggestions.' });
+  }
+};
+
+export const reviewCron = async (req: Request, res: Response) => {
+  try {
+    const updatedPosts = await PostModel.updateMany(
+      { reviewed: false },
+      { reviewed: true },
+    );
+    res.status(200).json({ message: 'Posts updated successfully', updatedCount: updatedPosts.modifiedCount });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating posts', error });
+  }
+};
+
+export const dateCron = async (req: Request, res: Response) => {
+  const startDate = new Date('2024-01-01T00:00:00.000Z');
+  const endDate = new Date('2024-05-31T23:59:59.999Z');
+
+  const getRandomDate = (start: Date, end: Date) => {
+    const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    return date.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+  };
+
+  const postsToUpdate = await PostModel.find({ reviewed: true });
+
+  const updatePromises = postsToUpdate.map((post) => {
+    const randomDate = getRandomDate(startDate, endDate);
+    return PostModel.updateOne(
+      { _id: post._id },
+      { date: randomDate },
+    );
+  });
+
+  try {
+    Promise.all(updatePromises);
+    res.status(200).json({ message: 'Posts updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating posts', error });
   }
 };

@@ -1,23 +1,33 @@
 export type TPost = {
-    _id?: string;
-    date?: string,
-    upvotes?: string[],
-    downvotes?: string[],
-    ipAddress?: string,
-    content?: string,
-    hashtags?: string[],
-    reviewed?: boolean,
-    canceled?: boolean,
-};
+    _id?: string
+    date?: string
+    upvotes?: string[]
+    downvotes?: string[]
+    ipAddress?: string
+    content?: string
+    hashtags?: string[]
+    reviewed?: boolean
+    canceled?: boolean
+}
+
 export type TPostSubmit = {
-    ipAddress?: string,
-    content?: string,
-};
+    ipAddress?: string
+    content?: string
+}
+
 export type TPostVote = {
-    ipAddress?: string,
-    postId: string,
-    up: boolean,
-};
+    ipAddress?: string
+    postId: string
+    up: boolean
+}
+
 export type TPostHashtags = {
-    _id: string, count: number
-};
+    _id: string
+    count: number
+}
+
+export enum TPostSort {
+    NEW = 'new',
+    TOP = 'top',
+    HOT = 'hot',
+}

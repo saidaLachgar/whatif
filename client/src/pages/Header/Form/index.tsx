@@ -40,6 +40,7 @@ const Form = (): JSX.Element => {
     },
     onError: (error) => {
       toast.dismiss();
+      // @ts-ignore 
       toast.error(`Error submitting post: ${error.message}`);
     },
   });
@@ -50,8 +51,12 @@ const Form = (): JSX.Element => {
     }
 
     const ipAddress = window.localStorage.getItem('ipAddress')!;
-    const transformMarkup = content.match(/#\[([^#\]]+)\]/)?.[1] || '';
-    mutation.mutate({ content: transformMarkup, ipAddress });
+    const transformMarkup = content.match(/#\[([^#\]]+)\]/)?.[1] || content;
+    mutation.mutate({
+      // content: '',
+      content: transformMarkup.replace(/(?:\r\n|\r|\n)/g, '<br>'),
+      ipAddress,
+    });
   }, [content, mutation, count]);
 
   useEffect(() => {
@@ -88,6 +93,11 @@ const Form = (): JSX.Element => {
     const { value } = event.target;
     setContent(value);
     setCount(value.length);
+    setTimeout(() => {
+      if (inputRef?.current?.style.height === '72px') {
+        inputRef.current.style.height = `${inputRef.current.scrollHeight + 20}px`;
+      }
+    }, 100);
   }, []);
 
   const classNames = classnames('Form', {

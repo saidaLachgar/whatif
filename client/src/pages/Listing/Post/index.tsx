@@ -24,13 +24,26 @@ const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | 
     ).toUpperCase() : null
   ), [data.date]);
 
+  // const content = useMemo(() => (
+  //   data.content?.split(REGEX).map((part, index) => {
+  //     if (part.startsWith('#')) {
+  //       const tag = part.substring(1);
+  //       return <Link to={`/${tag}`} key={index}>#{tag}</Link>;
+  //     }
+  //     return part;
+  //   })
+  // ), [data.content]);
+
   const content = useMemo(() => (
-    data.content?.split(REGEX).map((part, index) => {
+    data.content?.split(REGEX).flatMap((part, index) => {
       if (part.startsWith('#')) {
         const tag = part.substring(1);
         return <Link to={`/${tag}`} key={index}>#{tag}</Link>;
       }
-      return part;
+
+      return part.split('<br>').flatMap((line, lineIndex) => (
+        lineIndex > 0 ? [<br key={`${index}-${lineIndex}`} />, line] : [line]
+      ));
     })
   ), [data.content]);
 
@@ -61,7 +74,7 @@ const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | 
       <div className="Post__Rating">
         <p
           className={classnames('Post__Rating__Up', {
-            'Post__Rating__Up--active': data.upvotes?.includes(ipAddress),
+            'Post__Rating__Up--active': data.upvotes?.includes(ipAddress ?? ''),
           })}
           onClick={() => { handleVotePost(data._id!, true); }}
         >
@@ -70,13 +83,13 @@ const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | 
         </p>
         <p
           className={classnames('Post__Rating__Down', {
-            'Post__Rating__Down--active': data.downvotes?.includes(ipAddress),
+            'Post__Rating__Down--active': data.downvotes?.includes(ipAddress ?? ''),
           })}
           onClick={() => { handleVotePost(data._id!, false); }}
         ><Icon name="arrow" />
         </p>
       </div>
-    </div>
+    </div >
   );
 };
 

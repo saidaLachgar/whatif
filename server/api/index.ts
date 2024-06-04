@@ -2,7 +2,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import './db/conn';
 import express, { Express, Request, Response } from "express";
-import { fetchPosts, cancelPost, createPost, searchHashtags, topHashtags, votePost } from './controllers/postsController';
+import { fetchPosts, cancelPost, createPost, searchHashtags, topHashtags, votePost, reviewCron, dateCron } from './controllers/postsController';
 
 
 /*
@@ -49,6 +49,10 @@ APP.patch('/posts/:id/vote', votePost);
 APP.get('/search-hashtags', searchHashtags);
 // Route to get top hashtags
 APP.get('/top-hashtags', topHashtags);
+// Route for review cron
+APP.get('/reviewed-cron', reviewCron);
+// Route for date cron
+APP.get('/date-cron', dateCron);
 
 
 

@@ -6,7 +6,7 @@ import App from './pages/App.tsx'
 
 const router = createBrowserRouter([
   {
-    path: "/:hashtag?",
+    path: "/:sort?/:hashtag?",
     element: <App />,
   },
 ]);

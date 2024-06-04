@@ -9,10 +9,10 @@ import Post from './Post';
 import toast from 'react-hot-toast';
 
 function Listing() {
-  const { hashtag } = useParams();
+  const { hashtag, sort } = useParams();
   const listRef = useRef<HTMLElement>(null);
   const queryClient = useQueryClient();
-  const ipAddress: string | null = window.localStorage.getItem('ipAddress');
+  const ipAddress: string | undefined = window.localStorage.getItem('ipAddress') || undefined;
 
   /**
    * get posts list using infinite query
@@ -24,8 +24,9 @@ function Listing() {
     isFetching,
     isLoading,
     error,
+    // @ts-ignore 
   } = useInfiniteQuery<APIResult, Error>({
-    queryKey: ["posts", { hashtag, ipAddress }],
+    queryKey: ["posts", { hashtag, ipAddress, sort }],
     queryFn: api.fetchPosts,
     getNextPageParam: (lastPage, _) => lastPage.nextPage,
     refetchOnWindowFocus: false,
@@ -56,6 +57,7 @@ function Listing() {
    * we can flatten the data into a single array.
    */
   const flattenedData = useMemo(
+    // @ts-ignore 
     () => (data?.pages?.length ? data.pages.flatMap((item) => item.docs) : []),
     [data]
   );
@@ -73,6 +75,7 @@ function Listing() {
     },
     onError: (error) => {
       toast.dismiss();
+      // @ts-ignore 
       toast.error(`Error canceling post: ${error.message}`);
     },
   });
@@ -97,6 +100,7 @@ function Listing() {
     },
     onError: (error) => {
       toast.dismiss();
+      // @ts-ignore 
       toast.error(error.message);
     },
   });
@@ -114,6 +118,9 @@ function Listing() {
       )}
       {error && (
         <div className="Listing__message">Couldn't fetch data</div>
+      )}
+      {flattenedData?.length === 0 && (
+        <div className="Listing__message">No data</div>
       )}
       <div className="Listing__posts">
         {!!flattenedData?.length &&
