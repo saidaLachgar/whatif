@@ -70,7 +70,7 @@ const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | 
         </div>
       }
       <div className="Post__Date">{date}</div>
-      <div className="Post__Content">{content}</div>
+      <div className="Post__Content">{content}<br />upvotes : {data.upvotes}<br />mine : {ipAddress}</div>
       <div className="Post__Rating">
         <p
           className={classnames('Post__Rating__Up', {
