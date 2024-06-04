@@ -19,6 +19,7 @@ import { TPostHashtags } from "src/model/post";
 const LIMIT = 400;
 
 const Form = (): JSX.Element => {
+  const ipAddress: string | null = window.localStorage.getItem('ipAddress');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const emojiRef = useRef(null);
   const [count, setCount] = useState(0);
@@ -69,15 +70,17 @@ const Form = (): JSX.Element => {
   }, []);
 
   const hashtagsSuggestions = async (query: string, callback) => {
-    if (!query) {
-      callback([]);
-      return;
-    }
-
     try {
-      const response: TPostHashtags[] = await api.fetchHashtags(query);
+      const response: TPostHashtags[] = await (
+        query ? api.fetchHashtags(query) : api.topHashtags({
+          queryKey: [
+            // @ts-ignore
+            'hashtagsSuggestions', { ipAddress: ipAddress as string }
+          ]
+        })
+      );
 
-      const suggestions = response.map((hashtag) => ({
+      const suggestions = response.slice(0, 5).map((hashtag) => ({
         id: hashtag._id,
         display: `${hashtag._id} (${hashtag.count} posts)`,
       }));

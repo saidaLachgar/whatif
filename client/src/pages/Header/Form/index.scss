@@ -47,13 +47,15 @@
         z-index: 10;
         border-radius: 10px;
         position: absolute;
-        min-width: 240px;
+        min-width: 200px;
+        padding: 10px 0px !important;
         overflow: hidden;
 
         li {
           width: 100%;
           cursor: pointer;
-          padding: 15px;
+          padding: 12px 15px;
+          font-size: 14px;
 
           &:hover {
             background-color: rgba(#fff, 0.05);

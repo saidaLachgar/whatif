@@ -16,9 +16,9 @@ export interface APIResult {
 }
 
 interface fetchPostsParams {
-  sort: string,
-  hashtag: string,
-  ipAddress: string,
+  sort?: string,
+  hashtag?: string,
+  ipAddress?: string,
 }
 interface QueryFunc {
   pageParam: number,
