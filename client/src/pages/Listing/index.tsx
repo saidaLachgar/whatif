@@ -119,7 +119,7 @@ function Listing() {
       {error && (
         <div className="Listing__message">Couldn't fetch data</div>
       )}
-      {flattenedData?.length === 0 && (
+      {!isLoading && flattenedData?.length === 0 && (
         <div className="Listing__message">No data</div>
       )}
       <div className="Listing__posts">
