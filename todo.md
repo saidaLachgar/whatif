@@ -1,8 +1,6 @@
-[x] add sorting options (Most Popular, Newest). !!!! to be tested (HOT)
-[x] fix content br
-[] add data
-[] add suggestions
-[] captcha
+[x] popup mobile
+[x] url refresh
+[] captcha https://altcha.org/docs/api/spam-filter-api/
 [] add footer
 created by an athunsim developer for fun
 

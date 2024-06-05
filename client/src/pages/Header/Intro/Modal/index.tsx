@@ -3,14 +3,14 @@ import Icon from 'src/components/Icon';
 import image from '/images/vote.png';
 import CopyLink from './CopyLink';
 import useOutside from "src/utils/useOutside";
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 interface Props {
   onClose(): void,
   isOpen?: boolean,
 }
 
-const Modal = ({ isOpen, onClose }: Props): JSX.Element | null => {
+const Modal = ({ isOpen, onClose }: Props): React.JSX.Element | null => {
   const modalRef = useRef(null);
   useOutside(modalRef, () => onClose());
   if (!isOpen) {

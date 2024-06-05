@@ -6,7 +6,7 @@ import {
   OnChangeHandlerFunc,
 } from "react-mentions";
 import EmojiPicker, { EmojiStyle, SkinTonePickerLocation, Theme } from 'emoji-picker-react';
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Icon from "src/components/Icon";
 import CharacterCount from './CharacterCount';
 import classnames from 'classnames';
@@ -18,7 +18,7 @@ import { TPostHashtags } from "src/model/post";
 
 const LIMIT = 400;
 
-const Form = (): JSX.Element => {
+const Form = (): React.JSX.Element => {
   const ipAddress: string | null = window.localStorage.getItem('ipAddress');
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const emojiRef = useRef(null);
@@ -32,12 +32,15 @@ const Form = (): JSX.Element => {
     onMutate: () => {
       toast.loading('Submitting post...');
     },
-    onSuccess: () => {
+    onSuccess: ({ _id: hash }) => {
       toast.dismiss();
       toast.success('Post submitted successfully', { icon: '🔥' });
       queryClient.invalidateQueries('posts');
       setContent('');
       setCount(0);
+      if (hash) {
+        window.location.hash = `post-${hash}`;
+      }
     },
     onError: (error) => {
       toast.dismiss();

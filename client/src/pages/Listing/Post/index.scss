@@ -9,6 +9,9 @@
   &:hover {
     border-color: rgba(255, 255, 255, 0.1);
   }
+  &--active {
+    outline: 3px solid $color-green;
+  }
   &__Header {
     background-color: rgba($color: $color-black, $alpha: 0.5);
     margin: -33px -33px 23px;

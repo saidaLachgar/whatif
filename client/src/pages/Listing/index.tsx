@@ -2,7 +2,7 @@ import './index.scss';
 import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry';
 import { useParams } from 'react-router-dom';
-import { useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import api, { APIResult } from 'src/api/posts';
 import Filter from './Filter';
 import Post from './Post';
@@ -31,6 +31,14 @@ function Listing() {
     getNextPageParam: (lastPage, _) => lastPage.nextPage,
     refetchOnWindowFocus: false,
   })
+
+  useEffect(() => {
+    const { hash } = window.location;
+
+    if (hash) {
+      document.querySelector(hash)?.scrollIntoView();
+    }
+  }, [data])
 
   /**
    * scroll to list on hashtag change

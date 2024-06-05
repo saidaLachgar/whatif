@@ -1,6 +1,6 @@
 import './index.scss';
 import classnames from 'classnames';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { TPost } from 'src/model/post';
 import Icon from 'src/components/Icon';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const REGEX = /(#\w+)/g; // Regular expression to find hashtags
-const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | null => {
+const Post = ({ data, handleCancelPost, handleVotePost }: Props): React.JSX.Element | null => {
   const ipAddress = useMemo(() => (
     window.localStorage.getItem('ipAddress')
   ), []);
@@ -48,7 +48,10 @@ const Post = ({ data, handleCancelPost, handleVotePost }: Props): JSX.Element | 
   ), [data.content]);
 
   return (
-    <div className="Post">
+    <div
+      id={`post-${data._id}`}
+      className={`Post${window.location.hash.replace('#post-', '') === data._id ? ' Post--active' : ''}`}
+    >
       {ipAddress === data.ipAddress &&
         <div className="Post__Header">
           <span className="Post__Author">POSTED BY YOU</span>
