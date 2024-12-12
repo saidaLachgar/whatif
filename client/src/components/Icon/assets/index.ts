@@ -9,6 +9,7 @@ import x from './x.svg?react'
 import Facebook from './facebook.svg?react'
 import Linkedin from './linkedin.svg?react'
 import Close from './close.svg?react'
+import Github from './github.svg?react'
 
 export default {
   'time': Time,
@@ -22,4 +23,5 @@ export default {
   'facebook': Facebook,
   'linkedin': Linkedin,
   'close': Close,
+  'github': Github,
 };
